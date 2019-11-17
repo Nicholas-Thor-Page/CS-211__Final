@@ -4,6 +4,11 @@ import java.awt.event.*;
 import java.util.Calendar;
 import java.time.YearMonth;
 
+/**
+* CalendarView is a JPanel that displays a Calendar with a different color for
+* the current date and days with TodoList items.
+* The calendar only displays one month at a time, but there are buttons to change months.
+*/
 class CalendarView extends JPanel{
 
     private static final String[] weekdayNames = {"Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"};
@@ -50,6 +55,7 @@ class CalendarView extends JPanel{
 
 
         //navigation buttons
+        //TODO: add functionality to input a desired month/date
         c.gridx = 1;
         Button previous = new Button("<");
         previous.addActionListener(new ActionListener(){
@@ -94,6 +100,9 @@ class CalendarView extends JPanel{
             for(CalendarDay button : buttons)
                 if(button != null)
                     remove(button);
+        //The windows 10 calendar displays 6 weeks no matter what so I followed suit
+        //previously this value was calculated to only use the minimum amount of weeks
+        //to fit every day of the month.
         int weeks = 6;
         //get where month starts and how many days it has
         int firstDay = CalendarView.firstWeekdayOfMonth(date);
@@ -108,7 +117,7 @@ class CalendarView extends JPanel{
                 c.gridx = day;
                 //get numerical day of month
                 int dayOfMonth = (week*7+day-firstDay+1);
-                CalendarDay cd = new CalendarDay(dayOfMonth, Color.WHITE);
+                CalendarDay cd = new CalendarDay(date, dayOfMonth, Color.WHITE);
                 //add button reference for later deletion
                 dateButtons[week][day] = cd;
                 add(cd, c);
