@@ -1,0 +1,26 @@
+So far, the group has uploaded the CalendarDay, CalendarView, todoItem, todoList, and todoListView classes.
+We still require a file reading class so we can locally store event information.
+
+
+As of right now, we are trying to collaborate by figuring out the names of our classes and methods.
+This will allow all of our implementations to become easier.
+
+
+We are approximately 40% through the entire project.
+
+
+CalendarView - Shows the calendar (Thor)
+	This class displays the calendar UI
+
+todoListView - Sorted list of items (Nebyu)
+	This class has a todoItem array that is sorted by the date
+
+todoList - Handles all of the todoItem array functions (Nebyu)
+	This class sorts and keeps track of all the events
+	Contains a method that returns all events for a specific day
+
+todoItem - Stores the details of a specific event (Time & Date, Title, Description, Whether or not it's completed) (Nebyu)
+	This class has Calendar Object, String name, String description, and boolean completed
+
+FileReader - Stores the data for each event (Cameron)
+	This class both reads and writes the details of an event
