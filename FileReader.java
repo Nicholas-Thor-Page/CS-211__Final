@@ -15,7 +15,9 @@ public class FileReader
       writer.newLine();
       writer.write(temp.getDescription());
       writer.newLine();
-      writer.write(temp.getCompleted());
+      writer.write(temp.getCompleted().toString());
+      writer.newLine();
+      writer.write(temp.getCalendar().getDate().toString());
       writer.newLine();
       writer.newLine();
     }
@@ -34,6 +36,9 @@ public class FileReader
       temp.setTitle(scan.nextLine());
       temp.setDescription(scan.nextLine());
       temp.setCompleted(Boolean.parseBoolean(scan.nextLine()));
+      Calendar cal = new Calendar();
+      cal.setTime(DateFormat.parse(scan.nextLine()));
+      temp.setCalendar(cal);
       list.add(temp);
       scan.nextLine();  //advance to the next line, tasks are seperated by empty lines
     }
