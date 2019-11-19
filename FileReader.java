@@ -15,7 +15,7 @@ public class FileReader
       writer.newLine();
       writer.write(temp.getDescription());
       writer.newLine();
-      writer.write(temp.isComplete());
+      writer.write(temp.getCompleted());
       writer.newLine();
       writer.newLine();
     }
