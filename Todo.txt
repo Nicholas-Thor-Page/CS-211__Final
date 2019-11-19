@@ -14,7 +14,20 @@ Todo list for the todo list project
 
         possible solutions:
             - have todoList extend `ArrayList<todoItem>` and override the add method
+                - I (thor) tried this and ran into some issues, may have to be a joint effort
 
+
+
+
+    FileReader:
+        - fix compile-time errors
+            - use `Calendar.getInstance()` instead of `new Calendar()`
+            - raw datatypes (int, char, boolean, long, double, etc.) don't have toString methods
+            - calendar does not have getDate() method
+
+        possible solutions:
+            - use `boolean + ""` for string conversion
+            - calendar.getTime() returns a Date object, may be what you were thinking calendar.getDate() does
 
 
 
