@@ -1,0 +1,60 @@
+Todo list for the todo list project
+
+    General:
+        - change todoList and todoItem classes to be TodoList and TodoItem 
+
+
+
+
+
+    todoList class:
+        - method for adding and removing todoItem objects
+            - add method should add the object in a sorted position (sorted by Calendar field)
+        - public access to ArrayList storing todoItem objects
+
+        possible solutions:
+            - have todoList extend `ArrayList<todoItem>` and override the add method
+
+
+
+
+
+
+    FileReader/todoList:
+        - FileReader's methods currently accepts and returns an ArrayList of todoItem objects, but todoList does not accept or return any ArrayList
+
+        possible solutions:
+            - change FileReader to use todoList instances as input and output
+            - add a constructor to todoList that accepts an ArrayList of todoItem objects
+
+
+
+
+
+
+    General UI:
+        - we still a UI element to add todoItem objects to the todoList
+        - menu element to save and open files that store the todoList data
+
+
+
+
+
+
+    CalendarView:
+        - highlight days with todoItem instances
+            - possibly also display titles of the first few items
+
+        CalendarDay
+            - have window display the todoItem entries for that day
+                - sorted by calendar field
+                - possibly use a TodoListView
+
+
+
+
+
+
+
+    TodoListView:
+        - will eventually display information about todoItem objects in a similar fashion to the way assignments are displayed on Blackboard
