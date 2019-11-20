@@ -4,6 +4,9 @@ Todo list for the todo list project
         - change todoList and todoItem classes to be TodoList and TodoItem 
 
 
+    todoItem class:
+        - should not extend FileReader, todoItems are not FileReader objects
+
 
 
 
@@ -24,6 +27,9 @@ Todo list for the todo list project
             - use `Calendar.getInstance()` instead of `new Calendar()`
             - raw datatypes (int, char, boolean, long, double, etc.) don't have toString methods
             - calendar does not have getDate() method
+            - DateFormat is an abstract class, possibly use SimpleDateFormat
+                - Calendar.toString() doesn't print in a format parsable by SimpleDateFormat
+
 
         possible solutions:
             - use `boolean + ""` for string conversion
