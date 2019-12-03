@@ -1,7 +1,7 @@
 Todo list for the todo list project
 
     General:
-        - change todoList and todoItem classes to be TodoList and TodoItem 
+        - change todoList and todoItem classes to be TodoList and TodoItem
 
 
     todoItem class:

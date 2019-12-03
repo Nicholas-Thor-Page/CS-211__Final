@@ -11,34 +11,48 @@ import java.time.YearMonth;
 */
 class CalendarView extends JPanel{
 
-    private static final String[] weekdayNames = {"Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"};
+    private static final String[] weekdayNames = {" SUN "," MON "," TUE "," WED "," THU "," FRI "," SAT "};
     private static final String[] monthNames = {"January","February","March","April","May","June","July","August","September","October","November","December"};
 
 
     private CalendarDay[][] dateButtons = new CalendarDay[6][7];
-    private Calendar date;
+    public Calendar date;
     private Label monthLabel;
+    private TodoList list;
     /**
     creates a CalendarView with the current date/time
     */
-    public CalendarView(){
-        this(Calendar.getInstance());
+    public CalendarView(TodoList list){
+        this(Calendar.getInstance(), list);
     }
 
-    public CalendarView(Calendar date){
+    public CalendarView(Calendar date, TodoList list){
         this.date = date;
+        this.list = list;
         //monthLabel referrence used in both this constructor and monthButtons
         this.monthLabel = new Label("", Label.CENTER);
         //create gridbag layout
         setLayout(new GridBagLayout());
-        setFont(getFont().deriveFont(18.0f));
+        setFont(new Font(Font.MONOSPACED, Font.BOLD, 18));
         GridBagConstraints c = new GridBagConstraints();
         //fill the entire panel
         c.anchor = GridBagConstraints.PAGE_START;
         c.fill = GridBagConstraints.BOTH;
         c.weightx = 1;
         c.weighty = 1;
-        //add the buttons for each day of the month
+        //initialize buttons for each day of month
+        c.gridwidth = 1;
+        //add buttons
+        for(int week=0;week<6;week++){
+            c.gridy = week+2;
+            for(int day=0;day<7;day++){
+                c.gridx = day;
+                CalendarDay cd = new CalendarDay(date, list, Color.WHITE);
+                dateButtons[week][day] = cd;
+                add(cd, c);
+            }
+        }
+        //sets the correct date for each button
         monthButtons(this.date, c);
 
         //add labels for days of the week
@@ -95,46 +109,33 @@ class CalendarView extends JPanel{
 
 
     private void monthButtons(Calendar date, GridBagConstraints c){
-        //delete previous buttons if any
-        for(CalendarDay[] buttons : this.dateButtons)
-            for(CalendarDay button : buttons)
-                if(button != null)
-                    remove(button);
-        //The windows 10 calendar displays 6 weeks no matter what so I followed suit
-        //previously this value was calculated to only use the minimum amount of weeks
-        //to fit every day of the month.
-        int weeks = 6;
         //get where month starts and how many days it has
         int firstDay = CalendarView.firstWeekdayOfMonth(date);
         int monthLength = CalendarView.lengthOfMonth(date);
 
-
-        c.gridwidth = 1;
-        //add buttons
-        for(int week=0;week<weeks;week++){
-            c.gridy = week+2;
-            for(int day=0;day<7;day++){
-                c.gridx = day;
-                //get numerical day of month
-                int dayOfMonth = (week*7+day-firstDay+1);
-                CalendarDay cd = new CalendarDay(date, dayOfMonth, Color.WHITE);
-                //add button reference for later deletion
-                dateButtons[week][day] = cd;
-                add(cd, c);
-                //TODO: remove else
-                //if the day is not in the month, use a disabled greyed-out button instead
-                if(week*7+day >= firstDay && dayOfMonth <= monthLength){
+        for(int week = 0;week<6;week++)
+            for(int day = 0;day<7;day++){
+                int dayOfMonth = week*7 + day - firstDay;
+                if(dayOfMonth < 0 || dayOfMonth >= monthLength){
+                    dateButtons[week][day].setEnabled(false);
+                    dateButtons[week][day].setBackground(Color.GRAY);
+                    dateButtons[week][day].setLabel(" ");
                 }else{
-                    cd.setBackground(Color.GRAY);
-                    cd.setEnabled(false);
-                    cd.setLabel("");
+                    Calendar newDate = (Calendar)date.clone();
+                    newDate.set(Calendar.DAY_OF_MONTH, dayOfMonth + 1);
+                    dateButtons[week][day].setEnabled(true);
+                    dateButtons[week][day].setBackground(Color.WHITE);
+                    dateButtons[week][day].changeDate(newDate);
                 }
             }
-        }
+
         //update the monthLabel text
         this.monthLabel.setText(monthNames[date.get(Calendar.MONTH)]+" "+date.get(Calendar.YEAR));
         //highlight the current date
-        this.highlightDate(Calendar.getInstance(), new Color(255,212,212));
+        this.highlightDate(Calendar.getInstance(), new Color(255,0,0));
+        //highlight the dates with todoItems
+        for(TodoItem item : list)
+            this.highlightDate(item.getCalendar(), new Color(63,63,255));
         //push updates
         this.updateUI();
     }
@@ -148,6 +149,7 @@ class CalendarView extends JPanel{
     @param color color to change the button to
     */
     public void highlightDate(Calendar date, Color color){
+        if(date == null) return;
         //test to see if the displayed month has the date to be highlighted
         if(date.get(Calendar.MONTH) == this.date.get(Calendar.MONTH)
         && date.get(Calendar.YEAR) == this.date.get(Calendar.YEAR)){
@@ -155,7 +157,13 @@ class CalendarView extends JPanel{
             //get row and column of corresponding button
             int week = dayOfMonth/7;
             int day = dayOfMonth%7;
-            dateButtons[week][day].setBackground(color);
+
+            Color oldColor = dateButtons[week][day].getBackground();
+            int newRed = (color.getRed() + oldColor.getRed())/2;
+            int newGreen = (color.getGreen() + oldColor.getGreen())/2;
+            int newBlue = (color.getBlue() + oldColor.getBlue())/2;
+            Color newColor = new Color(newRed, newGreen, newBlue);
+            dateButtons[week][day].setBackground(newColor);
         }
     }
 
@@ -192,7 +200,7 @@ class CalendarView extends JPanel{
     //TODO: for testing
     public static void main(String[] args){
         JFrame window = new JFrame();
-        CalendarView cv = new CalendarView();
+        CalendarView cv = new CalendarView(new TodoList());
         window.add(cv);
         window.setTitle("Calendar");
         window.setSize(400,250);
